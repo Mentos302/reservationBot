@@ -2,16 +2,6 @@ const { Account } = require('../database')
 const bot = require('../bot')
 
 class accountService {
-  async getUnLinked() {
-    try {
-      const accounts = await Account.find({ reservationLink: 'unlinked' })
-
-      return accounts
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   async saveReservationLink(email, reservationLink) {
     try {
       const account = await Account.updateOne({ email }, { reservationLink })
