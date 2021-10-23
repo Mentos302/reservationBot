@@ -2,22 +2,10 @@ const puppeteer = require('puppeteer')
 
 class siteService {
   async getReservationLink(login, password) {
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        `--proxy-server=138.59.204.110:9594`,
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-      ],
-    })
+    const browser = await puppeteer.launch()
 
     try {
       const page = await browser.newPage()
-
-      await page.authenticate({
-        username: 'Jq4uat',
-        password: 'X0vZg3',
-      })
 
       await page.setRequestInterception(true)
       page.on('request', (request) => {
@@ -53,20 +41,8 @@ class siteService {
   }
 
   async reservate(link) {
-    const browser = await puppeteer.launch({
-      headless: false,
-      args: [
-        `--proxy-server=138.59.204.110:9594`,
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-      ],
-    })
+    const browser = await puppeteer.launch()
     const page = await browser.newPage()
-
-    await page.authenticate({
-      username: 'Jq4uat',
-      password: 'X0vZg3',
-    })
 
     try {
       await page.setRequestInterception(true)
