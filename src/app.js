@@ -1,23 +1,24 @@
-const eroGuideAccount = require('./classes/eroGuideAccount')
 const cron = require('node-cron')
 const bot = require('./bot')
 const db = require('./database')
+const accountFactory = require('./helpers/accountFactory')
+const onceCron = require('./helpers/onceCron')
 
 ;(async () => {
-  const login = 'Sashaa'
+  cron.schedule('30 21 * * *', () => {
+    const accounts = await accountFactory()
 
-  const account = new eroGuideAccount(login, 'q6EKV0HASDbzsmr')
+    await Promise.all(
+      accounts.map(async (e) => {
+        if (!e.link) {
+          e = await e.loginAndSaveLink()
+        }
 
-  cron.schedule('50 21 * * *', () => {
-    account.loginAndSaveProxy()
-
-    console.log('cookies successfully saved!')
-  })
-
-  cron.schedule('59 59 21 * * *', () => {
-    const isReservated = account.reservation()
-
-    console.log(`'59 browser has been started`)
+        onceCron(`00 22 * * *`, () => {
+          e.reservation()
+        })
+      })
+    )
   })
 })()
 

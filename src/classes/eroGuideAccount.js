@@ -1,28 +1,27 @@
 const siteService = require('../services/siteService')
-const fs = require('fs').promises
+const accountService = require('../services/accountService')
 
 class eroGuideAccount {
-  constructor(login, password) {
-    this.login = login
+  constructor(email, password, link = '') {
+    this.email = email
     this.password = password
-    this.saveCookie = this.saveCookie
+    this.link = link
   }
 
-  async loginAndSaveProxy() {
-    const cookie = await siteService.signIn(this.login, this.password)
+  async loginAndSaveLink() {
+    this.link = await siteService.getReservationLink(this.email, this.password)
 
-    await this.saveCookie(this.login, cookie)
-  }
+    await accountService.saveReservationLink(this.email, this.link)
 
-  async saveCookie(login, cookie) {
-    await fs.writeFile(`cookies/${login}.json`, JSON.stringify(cookie))
+    return this
   }
 
   async reservation() {
-    const cookiesString = await fs.readFile(`cookies/${this.login}.json`)
-    const cookies = JSON.parse(cookiesString)
+    const isSuccess = await siteService.reservate(this.link)
 
-    await siteService.reservate(cookies)
+    if (isSuccess) {
+      accountService.successNotification(this.email, this.link)
+    }
   }
 }
 

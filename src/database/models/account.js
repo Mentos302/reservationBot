@@ -9,6 +9,9 @@ const accountScheme = mongoose.Schema(
     password: {
       type: String,
     },
+    reservationLink: {
+      type: String,
+    },
   },
   { versionKey: false }
 )

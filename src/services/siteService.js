@@ -1,13 +1,23 @@
 const puppeteer = require('puppeteer')
 
 class siteService {
-  async signIn(login, password) {
+  async getReservationLink(login, password) {
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox"]
+      headless: true,
+      args: [
+        `--proxy-server=138.59.204.110:9594`,
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+      ],
     })
 
     try {
       const page = await browser.newPage()
+
+      await page.authenticate({
+        username: 'Jq4uat',
+        password: 'X0vZg3',
+      })
 
       await page.setRequestInterception(true)
       page.on('request', (request) => {
@@ -26,11 +36,15 @@ class siteService {
       await page.type('input[type="password"]', password)
 
       await page.click('button[type="submit"]')
-      const cookie = await page.cookies()
+      await page.goto('https://www.eroguide.dk/Dashboard')
+
+      const link = await page.evaluate(
+        `document.querySelectorAll('.col-sm-4.tool')[1].querySelector('a').getAttribute('href')`
+      )
 
       browser.close()
 
-      return cookie
+      return link
     } catch (e) {
       browser.close()
 
@@ -38,16 +52,23 @@ class siteService {
     }
   }
 
-  async reservate(cookies) {
+  async reservate(link) {
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox"]
+      headless: false,
+      args: [
+        `--proxy-server=138.59.204.110:9594`,
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+      ],
+    })
+    const page = await browser.newPage()
+
+    await page.authenticate({
+      username: 'Jq4uat',
+      password: 'X0vZg3',
     })
 
     try {
-      const start = new Date().getTime()
-
-      const page = await browser.newPage()
-
       await page.setRequestInterception(true)
       page.on('request', (request) => {
         if (
@@ -59,31 +80,27 @@ class siteService {
         }
       })
 
-      await page.setCookie(...cookies)
-
-      page.goto('https://www.eroguide.dk/get_fp_ad_profile?user_id=35122')
-
-      const end = new Date().getTime()
-
-      console.log(`LoadingTesting: [${end - start}ms]`)
+      page.goto(`https://www.eroguide.dk${link}`)
 
       const actionBtn = await page.waitForSelector(
         '.reserve-fp-ad-profile-btn',
         {
           timeout: 30000,
-          visible: true,
         }
       )
 
-      await page.screenshot({ path: 'fullpage.png', fullPage: true });
-      
       await actionBtn.click()
 
-      console.log(`Succesfully reserved by ${login}`)
-
       browser.close()
+
+      return true
     } catch (e) {
+      await page.screenshot({
+        path: `screen/fullpage${link[0]}.png`,
+        fullPage: true,
+      })
       console.log(`Action button wasn't found, ${Date.now()}`)
+      console.log(e)
 
       browser.close()
     }
