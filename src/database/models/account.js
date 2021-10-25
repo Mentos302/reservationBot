@@ -2,15 +2,9 @@ const mongoose = require('mongoose')
 
 const accountScheme = mongoose.Schema(
   {
-    email: {
+    linkID: {
       type: String,
       unique: true,
-    },
-    password: {
-      type: String,
-    },
-    reservationLink: {
-      type: String,
     },
   },
   { versionKey: false }

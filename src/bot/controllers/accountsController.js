@@ -9,10 +9,10 @@ class AccountControllers {
   async getActiveAccounts(ctx) {
     try {
       const account = await service.getActiveAccounts()
-      let msg = `💡 Активные аккаунты, <b>ожидающие на резервацию</b>:\n`
+      let msg = `💡 Активные аккаунты, <b>ожидающие на резервацию: [${account.length}]</b>\n`
 
       account.forEach((e) => {
-        msg += `\n<b>${e.email}</b>`
+        msg += `\nID: <b>${e.linkID}</b>`
       })
 
       ctx.reply(
@@ -37,29 +37,23 @@ class AccountControllers {
     ctx.scene.enter('removeaccount')
   }
 
-  reqEmailAccountToAdd(ctx) {
+  reqLinkIDAccountToAdd(ctx) {
     ctx.reply(
-      '📬 Введите <b>E-mail от аккаунта</b>, который хотите добавить.',
+      '📬 Введите <b>ID аккаунта</b>, который хотите добавить.',
       Extra.HTML()
     )
   }
 
-  resEmailAccountToAdd(ctx) {
-    ctx.scene.enter('getpassword', { email: ctx.message.text })
-  }
-
-  reqPasswordAccountToAdd(ctx) {
-    ctx.reply(
-      '🔐 Введите <b>пароль от аккаунта</b>, который хотите добавить.',
-      Extra.HTML()
-    )
-  }
-
-  async resPasswordAccountToAdd(ctx) {
+  async resLinkIDAccountToAdd(ctx) {
     try {
-      const { email } = ctx.scene.state
+      const { text } = ctx.message
 
-      await service.addNewAccount(email, ctx.message.text)
+      await service.addNewAccount(text)
+
+      await ctx.reply(
+        `Аккаунт <b>ID#${text}</b> успешно добавлен.`,
+        Extra.HTML()
+      )
 
       ctx.scene.enter('activelist')
     } catch (e) {
@@ -67,18 +61,23 @@ class AccountControllers {
     }
   }
 
-  reqEmailToRemove(ctx) {
+  reqLinkIDToRemove(ctx) {
     ctx.reply(
-      '📬 Введите <b>E-mail от аккаунта</b>, который хотите убрать.',
+      '📬 Введите <b>ID аккаунта</b>, который хотите убрать.',
       Extra.HTML()
     )
   }
 
-  async resEmailToRemove(ctx) {
+  async resLinkIDToRemove(ctx) {
     try {
-      const email = ctx.message.text
+      const linkID = ctx.message.text
 
-      await service.removeAccount(email)
+      await service.removeAccount(linkID)
+
+      await ctx.reply(
+        `Аккаунт <b>ID#${linkID}</b> успешно удалён.`,
+        Extra.HTML()
+      )
 
       ctx.scene.enter('activelist')
     } catch (e) {

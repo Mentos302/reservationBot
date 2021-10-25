@@ -4,9 +4,9 @@ module.exports = () => {
   const scene = new Scene('getemail')
   const controller = require('../../../controllers/accountsController')
 
-  scene.enter(controller.reqEmailAccountToAdd)
+  scene.enter(controller.reqLinkIDAccountToAdd)
 
-  scene.on('text', controller.resEmailAccountToAdd)
+  scene.on('text', controller.resLinkIDAccountToAdd)
 
   scene.on('message', controller.msgTypeError)
 

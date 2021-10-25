@@ -2,16 +2,12 @@ const Stage = require('telegraf/stage')
 
 module.exports = (bot) => {
   const ActiveAccountsList = require('./scenes/activeAccounts')()
-  const ReqEmailToAdd = require('./scenes/addingNew/getEmail')()
-  const ReqPasswordToAdd = require('./scenes/addingNew/getPassword')()
+  const ReqLinkID = require('./scenes/addingNew/getLinkID')()
   const RemoveAccount = require('./scenes/removeAccount')()
 
-  const stage = new Stage(
-    [ActiveAccountsList, ReqEmailToAdd, ReqPasswordToAdd, RemoveAccount],
-    {
-      ttl: 120,
-    }
-  )
+  const stage = new Stage([ActiveAccountsList, ReqLinkID, RemoveAccount], {
+    ttl: 120,
+  })
 
   bot.use(stage.middleware())
 }

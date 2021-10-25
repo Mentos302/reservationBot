@@ -13,12 +13,9 @@ class AccountsService {
     }
   }
 
-  async addNewAccount(email, password) {
+  async addNewAccount(linkID) {
     try {
-      const account = await Account.create({
-        email,
-        password,
-      })
+      const account = await Account.create({ linkID })
 
       return account
     } catch (e) {
@@ -28,9 +25,9 @@ class AccountsService {
     }
   }
 
-  async removeAccount(email) {
+  async removeAccount(linkID) {
     try {
-      const account = await Account.deleteOne({ email })
+      const account = await Account.deleteOne({ linkID })
 
       return account
     } catch (e) {

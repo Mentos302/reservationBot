@@ -4,9 +4,9 @@ module.exports = () => {
   const scene = new Scene('removeaccount')
   const controller = require('../../controllers/accountsController')
 
-  scene.enter(controller.reqEmailToRemove)
+  scene.enter(controller.reqLinkIDToRemove)
 
-  scene.on('text', controller.resEmailToRemove)
+  scene.on('text', controller.resLinkIDToRemove)
 
   scene.on('message', controller.msgTypeError)
 
