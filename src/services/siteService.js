@@ -22,16 +22,16 @@ class siteService {
       password: 'X0vZg3',
     })
 
-    // await page.setRequestInterception(true)
-    // page.on('request', (request) => {
-    //   if (
-    //     ['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1
-    //   ) {
-    //     request.abort()
-    //   } else {
-    //     request.continue()
-    //   }
-    // })
+    await page.setRequestInterception(true)
+    page.on('request', (request) => {
+      if (
+        ['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort()
+      } else {
+        request.continue()
+      }
+    })
 
     return { browser, page }
   }
@@ -40,27 +40,27 @@ class siteService {
     const { browser, page } = await this.startBrowser()
 
     try {
-      page.goto(`https://www.eroguide.dk${link}`)
+      page.goto(`https://www.eroguide.dk/get_fp_ad_profile?user_id=${linkID}`)
 
       const actionBtn = await page.waitForSelector(
         '.reserve-fp-ad-profile-btn',
         {
-          timeout: 30000,
+          timeout: 10000,
         }
       )
 
       await actionBtn.click()
 
-      browser.close()
+      NotificationService.successReservation(linkID)
 
-      return true
+      browser.close()
     } catch (e) {
       await page.screenshot({
-        path: `screen/fullpage${link[0]}.png`,
+        path: `screen/fullpage${linkID}.png`,
         fullPage: true,
       })
+      NotificationService.successReservation(linkID)
       console.log(`Action button wasn't found, ${Date.now()}`)
-      console.log(e)
 
       browser.close()
     }
