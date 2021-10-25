@@ -6,7 +6,7 @@ module.exports = async () => {
   const accounts = await Account.find()
 
   accounts.forEach((e) => {
-    const account = new eroGuideAccount(e.email, e.password, e.reservationLink)
+    const account = new eroGuideAccount(e.linkID)
 
     instances.push(account)
   })

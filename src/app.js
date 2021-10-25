@@ -1,9 +1,9 @@
 const bot = require('./bot')
 const db = require('./database')
-const CronService = require('./services/cronService')
+const CronController = require('./controller/cronController')
 
-CronService.reservationInit()
-CronService.cancellingScanInit()
+// CronController.reservationInit()
+CronController.scannerInit()
 
 db.connection.once('open', async () => {
   console.log('Connected to MongoDB')

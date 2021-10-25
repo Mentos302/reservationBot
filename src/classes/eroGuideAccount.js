@@ -2,25 +2,17 @@ const siteService = require('../services/siteService')
 const accountService = require('../services/accountService')
 
 class eroGuideAccount {
-  constructor(email, password, link = '') {
-    this.email = email
-    this.password = password
-    this.link = link
-  }
-
-  async loginAndSaveLink() {
-    this.link = await siteService.getReservationLink(this.email, this.password)
-
-    await accountService.saveReservationLink(this.email, this.link)
-
-    return this
+  constructor(linkID) {
+    this.linkID = linkID
   }
 
   async reservation() {
-    const isSuccess = await siteService.reservate(this.link)
+    const { linkID } = this
+
+    const isSuccess = await siteService.reservate(linkID)
 
     if (isSuccess) {
-      accountService.successNotification(this.email, this.link)
+      accountService.successNotification(linkID)
     }
   }
 }
