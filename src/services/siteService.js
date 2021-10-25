@@ -8,19 +8,9 @@ class siteService {
 
   async startBrowser() {
     const browser = await puppeteer.launch({
-      headless: false,
-      args: [
-        `--proxy-server=138.59.204.110:9594`,
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-      ],
+      args: ['--no-sandbox'],
     })
     const page = await browser.newPage()
-
-    await page.authenticate({
-      username: 'Jq4uat',
-      password: 'X0vZg3',
-    })
 
     await page.setRequestInterception(true)
     page.on('request', (request) => {
