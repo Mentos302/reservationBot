@@ -49,7 +49,6 @@ class siteService {
         path: `screen/fullpage${linkID}.png`,
         fullPage: true,
       })
-      NotificationService.successReservation(linkID)
       console.log(`Action button wasn't found, ${Date.now()}`)
 
       browser.close()
