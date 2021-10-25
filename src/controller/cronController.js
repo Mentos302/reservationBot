@@ -8,15 +8,15 @@ const accountService = require('../services/accountService')
 class SiteController {
   async reservationInit() {
     try {
-      // cron.schedule('30 21 * * *', async () => {
-      const accounts = await accountFactory()
+      cron.schedule('30 21 * * *', async () => {
+        const accounts = await accountFactory()
 
-      accounts.map((e) => {
-        // onceCron(`00 22 * * *`, () => {
-        e.reservation()
-        // })
+        accounts.map((e) => {
+          onceCron(`00 22 * * *`, () => {
+            e.reservation()
+          })
+        })
       })
-      // })
     } catch (e) {
       console.log(e)
     }
