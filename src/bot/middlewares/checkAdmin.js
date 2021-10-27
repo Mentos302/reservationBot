@@ -12,11 +12,9 @@ module.exports = async (ctx) => {
     } catch (e) {
       console.log(e)
     }
-  }
-
-  if (user.is_admin) {
-    ctx.scene.enter('activelist')
   } else {
-    ctx.reply('🔒 Доступ запрещён!')
+    user.is_admin
+      ? ctx.scene.enter('activelist')
+      : ctx.reply('🔒 Доступ запрещён!')
   }
 }
