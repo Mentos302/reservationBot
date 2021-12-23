@@ -4,6 +4,7 @@ const onceCron = require('../helpers/onceCron')
 const siteService = require('../services/siteService')
 const accountFactory = require('../helpers/accountFactory')
 const accountService = require('../services/accountService')
+const scanAvailibleAccounts = require('../services/scanAvalilibleService')
 
 class SiteController {
   async reservationInit() {
@@ -16,6 +17,16 @@ class SiteController {
             e.reservation()
           })
         })
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async scanAvailibleAccounts() {
+    try {
+      cron.schedule('12 10 8,18,28 * *', async () => {
+        await scanAvailibleAccounts()
       })
     } catch (e) {
       console.log(e)

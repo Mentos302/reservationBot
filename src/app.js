@@ -4,6 +4,7 @@ const CronController = require('./controller/cronController')
 
 CronController.reservationInit()
 CronController.scannerInit()
+CronController.scanAvailibleAccounts()
 
 db.connection.once('open', async () => {
   console.log('Connected to MongoDB')
