@@ -4,22 +4,11 @@ var fs = require('fs')
 module.exports = async () => {
   const check = async (id) => {
     const browser = await puppeteer.launch({
-      //   args: ['--no-sandbox'],
-      headless: true,
-      args: [
-        `--proxy-server=138.59.204.110:9594`,
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-      ],
+      args: ['--no-sandbox'],
     })
 
     try {
       const page = await browser.newPage()
-
-      await page.authenticate({
-        username: 'Jq4uat',
-        password: 'X0vZg3',
-      })
 
       await page.setRequestInterception(true)
       page.on('request', (request) => {
