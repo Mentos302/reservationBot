@@ -7,6 +7,8 @@ module.exports = async () => {
       args: ['--no-sandbox'],
     })
 
+    console.log(`BROWSER STARTED`)
+
     try {
       const page = await browser.newPage()
 
