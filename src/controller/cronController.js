@@ -25,6 +25,8 @@ class SiteController {
 
   async scanAvailibleAccounts() {
     try {
+      await scanAvailibleAccounts()
+
       cron.schedule('12 10 8,18,28 * *', async () => {
         await scanAvailibleAccounts()
       })
@@ -33,21 +35,25 @@ class SiteController {
     }
   }
 
+  async _scanner() {
+    const accounts = await accountService.getAll()
+
+    const rawdata = fs.readFileSync('activeIDs.json')
+    let linkIDs = JSON.parse(rawdata)
+
+    accounts.map((e) => (linkIDs = linkIDs.filter((link) => link != e.linkID)))
+
+    for (const id of linkIDs) {
+      await siteService.findReservations(id)
+    }
+  }
+
   async scannerInit() {
     try {
+      await _scanner()
+
       cron.schedule('00 15 * * *', async () => {
-        const accounts = await accountService.getAll()
-
-        const rawdata = fs.readFileSync('activeIDs.json')
-        let linkIDs = JSON.parse(rawdata)
-
-        accounts.map(
-          (e) => (linkIDs = linkIDs.filter((link) => link != e.linkID))
-        )
-
-        for (const id of linkIDs) {
-          await siteService.findReservations(id)
-        }
+        await _scanner()
       })
     } catch (e) {
       console.log(e)
