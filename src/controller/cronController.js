@@ -25,9 +25,9 @@ class SiteController {
 
   async scanAvailibleAccounts() {
     try {
-      cron.schedule('12 10 8,18,28 * *', async () => {
-        await scanAvailibleAccounts()
-      })
+      // cron.schedule('12 10 8,18,28 * *', async () => {
+      await scanAvailibleAccounts()
+      // })
     } catch (e) {
       console.log(e)
     }

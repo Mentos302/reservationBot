@@ -2,8 +2,8 @@ const bot = require('./bot')
 const db = require('./database')
 const CronController = require('./controller/cronController')
 
-CronController.reservationInit()
-CronController.scannerInit()
+// CronController.reservationInit()
+// CronController.scannerInit()
 CronController.scanAvailibleAccounts()
 
 db.connection.once('open', async () => {

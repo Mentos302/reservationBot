@@ -56,6 +56,7 @@ module.exports = async () => {
       if (id) {
         last_finded = id
         activeIDs.push(id)
+        console.log(`NEW ACCOUNT: `, id)
       } else if (num - activeIDs[activeIDs.length - 1] > 10000) {
         break
       }
