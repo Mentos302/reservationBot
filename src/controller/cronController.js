@@ -25,8 +25,6 @@ class SiteController {
 
   async scanAvailibleAccounts() {
     try {
-      await scanAvailibleAccounts()
-
       cron.schedule('12 10 8,18,28 * *', async () => {
         await scanAvailibleAccounts()
       })
@@ -42,6 +40,8 @@ class SiteController {
     let linkIDs = JSON.parse(rawdata)
 
     accounts.map((e) => (linkIDs = linkIDs.filter((link) => link != e.linkID)))
+
+    console.log(accounts.length, linkIDs.length)
 
     for (const id of linkIDs) {
       await siteService.findReservations(id)

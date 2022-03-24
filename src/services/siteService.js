@@ -70,6 +70,8 @@ class siteService {
       if (el === null) {
         throw new Error('Not found')
       } else {
+        console.log(`Found a reservation!`)
+
         browser.close()
 
         NotificationService.findedReservatedDay(linkID)
