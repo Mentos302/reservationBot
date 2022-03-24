@@ -50,10 +50,10 @@ class SiteController {
 
   async scannerInit() {
     try {
-      await _scanner()
+      await this._scanner()
 
       cron.schedule('00 15 * * *', async () => {
-        await _scanner()
+        await this._scanner()
       })
     } catch (e) {
       console.log(e)
